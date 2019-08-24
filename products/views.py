@@ -56,8 +56,6 @@ def read_workbook(request, excel_file, provider):
     dict_list = []
     if provider == 1:  # ARTEC
         for row_index in range(0, sheet.nrows):
-            # task
-            progress_view(request, row_index, sheet.nrows)
             code = sheet.cell(row_index, 0).value.encode('utf-8')
             description = sheet.cell(row_index, 1).value.encode('utf-8')
             list_price = parse_price(sheet.cell(row_index, 2).value.encode('utf-8'), provider)
@@ -69,8 +67,6 @@ def read_workbook(request, excel_file, provider):
             dict_list.append(d)
     elif provider == 2:  # MONTENEGRO
         for row_index in range(0, sheet.nrows):
-            # task
-            progress_view(request, row_index, sheet.nrows)
             if sheet.cell(row_index, 0).value.encode('utf-8') != '' and \
                     sheet.cell(row_index, 1).value.encode('utf-8') != '':
                 code = sheet.cell(row_index, 0).value.encode('utf-8')
