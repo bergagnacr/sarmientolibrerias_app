@@ -37,46 +37,40 @@ def obtain_provider(filename):
         return None
 
 
-def parse_price(price, provider):
-    if provider == 1:
-        return float(price.split('$ ')[1].replace(',', '.'))
-    elif provider == 2:
-        return price.replace(",", '.')
-
-
 def progress_view(request, row, total):
     print('2')
     result = my_task.delay(row, total)
     return render(request, 'products/snippets/display_progress.html', context={'task_id': result.task_id})
 
 
+def parse_price(price, provider):
+    if provider == 1:
+        return float(price.split('$ ')[1].replace(',', '.'))
+    elif provider == 2:
+        return float(price.replace(",", '.'))
+
+
 def read_workbook(request, excel_file, provider):
     workbook = xlrd.open_workbook(os.path.join(settings.MEDIA_ROOT, excel_file))
     sheet = workbook.sheet_by_index(0)
     dict_list = []
-    if provider == 1:  # ARTEC
-        for row_index in range(0, sheet.nrows):
+    code = 0
+    description = ''
+    list_price = 0.00
+    for row_index in range(0, sheet.nrows):
+        if provider == 1:  # ARTEC
             code = sheet.cell(row_index, 0).value.encode('utf-8')
             description = sheet.cell(row_index, 1).value.encode('utf-8')
             list_price = parse_price(sheet.cell(row_index, 2).value.encode('utf-8'), provider)
-            d = {"Code": code,
-                 "Description": description,
-                 "ProviderPrice": list_price,
-                 "Provider": provider,
-                 "Updated": str(datetime.datetime.today())}
-            dict_list.append(d)
-    elif provider == 2:  # MONTENEGRO
-        for row_index in range(0, sheet.nrows):
-            if sheet.cell(row_index, 0).value.encode('utf-8') != '' and \
-                    sheet.cell(row_index, 1).value.encode('utf-8') != '':
-                code = sheet.cell(row_index, 0).value.encode('utf-8')
-                description = sheet.cell(row_index, 1).value.encode('utf-8')
-                list_price = sheet.cell(row_index, 2).value
-                d = {"Code": code,
-                     "Description": description,
-                     "ProviderPrice": list_price,
-                     "Provider": provider,
-                     "Updated": str(datetime.datetime.today())}
-                dict_list.append(d)
+        elif provider == 2:  # MONTENEGRO
+            code = sheet.cell(row_index, 0).value.encode('utf-8')
+            description = sheet.cell(row_index, 1).value.encode('utf-8')
+            list_price = sheet.cell(row_index, 2).value
+        d = {"Code": code,
+             "Description": description,
+             "ProviderPrice": list_price,
+             "Provider": provider,
+             "Updated": str(datetime.datetime.today())}
+        dict_list.append(d)
     return dict_list
 
