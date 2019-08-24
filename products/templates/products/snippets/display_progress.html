@@ -1,0 +1,15 @@
+{% load static %}
+{#<div class="progress-wrapper">#}
+{#    <div id="progress-bar" class="progress-bar progress-bar-stripped bg-success" style="width: 10%">&nbsp;</div>#}
+{#</div>#}
+<div class="progress-wrapper">
+    <div id="progress-bar" class="progress-bar" style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
+</div>
+<script src="{% static 'celery_progress/celery_progress.js' %}"></script>
+<script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    var progressUrl = " {% url 'celery_progress:task_status' 'task-id-stub' %}";
+                    var taskUrl = progressUrl.replace('task-id-stub', response.text);
+                    CeleryProgressBar.initProgressBar(progressUrl)
+                });
+            </script>
