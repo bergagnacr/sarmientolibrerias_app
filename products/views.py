@@ -1,10 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 import xlrd
 import os
 import datetime
 from .task import my_task
+from celery import task
+from celery.result import AsyncResult
 
 # Create your views here.
 
@@ -14,16 +16,18 @@ def products_import_home(request):
         filename = upload_file(request.FILES)
         provider = obtain_provider(filename)
         if provider is not None:
-            list_dict = read_workbook(request, filename, provider)
+            context = read_workbook(request, filename, provider)
+            return render(request, 'products/display_progress.html', context)
     else:
-        print(request.method)
-    return render(request, 'products/import_lists.html', {})
+        return render(request, 'products/import_lists.html', {})
 
 
 def upload_file(price_list_file):
     f = price_list_file['myfile']
     fs = FileSystemStorage()
     f_name = f.name.replace(' ', '')
+    if fs.exists(f_name):
+        os.remove(os.path.join(settings.MEDIA_ROOT, f_name))
     filename = fs.save(f_name, f)
     return filename
 
@@ -37,12 +41,6 @@ def obtain_provider(filename):
         return None
 
 
-def progress_view(request, row, total):
-    print('2')
-    result = my_task.delay(row, total)
-    return render(request, 'products/snippets/display_progress.html', context={'task_id': result.task_id})
-
-
 def parse_price(price, provider):
     if provider == 1:
         return float(price.split('$ ')[1].replace(',', '.'))
@@ -53,10 +51,17 @@ def parse_price(price, provider):
 def read_workbook(request, excel_file, provider):
     workbook = xlrd.open_workbook(os.path.join(settings.MEDIA_ROOT, excel_file))
     sheet = workbook.sheet_by_index(0)
+    dict_list = return_dict_from_list(request, sheet, provider)
+    return dict_list
+
+
+def return_dict_from_list(request, sheet, provider):
     dict_list = []
     code = 0
     description = ''
     list_price = 0.00
+    result = 0
+    context = {'task_id': result}
     for row_index in range(0, sheet.nrows):
         if provider == 1:  # ARTEC
             code = sheet.cell(row_index, 0).value.encode('utf-8')
@@ -72,5 +77,9 @@ def read_workbook(request, excel_file, provider):
              "Provider": provider,
              "Updated": str(datetime.datetime.today())}
         dict_list.append(d)
-    return dict_list
-
+        # Call to task
+        result = my_task.delay(row_index, sheet.nrows)
+        context['task_id'] = result.task_id
+        # print(context)
+        render(request, 'products/display_progress.html', context)
+    return context
