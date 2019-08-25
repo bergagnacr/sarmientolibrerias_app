@@ -4,9 +4,6 @@ from django.conf import settings
 import xlrd
 import os
 import datetime
-from .task import my_task
-from celery import task
-from celery.result import AsyncResult
 
 # Create your views here.
 
@@ -16,10 +13,10 @@ def products_import_home(request):
         filename = upload_file(request.FILES)
         provider = obtain_provider(filename)
         if provider is not None:
-            context = read_workbook(request, filename, provider)
+            context, dic_list = read_workbook(request, filename, provider)
             return render(request, 'products/display_progress.html', context)
     else:
-        return render(request, 'products/import_lists.html', {})
+        return render(request, 'products/display_progress.html', {'value': 0, 'total': 100})
 
 
 def upload_file(price_list_file):
@@ -32,6 +29,13 @@ def upload_file(price_list_file):
     return filename
 
 
+def parse_price(price, provider):
+    if provider == 1:
+        return float(price.split('$ ')[1].replace(',', '.'))
+    elif provider == 2:
+        return float(price.replace(",", '.'))
+
+
 def obtain_provider(filename):
     if 'ARTEC' in filename:
         return 1
@@ -39,13 +43,6 @@ def obtain_provider(filename):
         return 2
     else:
         return None
-
-
-def parse_price(price, provider):
-    if provider == 1:
-        return float(price.split('$ ')[1].replace(',', '.'))
-    elif provider == 2:
-        return float(price.replace(",", '.'))
 
 
 def read_workbook(request, excel_file, provider):
@@ -57,11 +54,10 @@ def read_workbook(request, excel_file, provider):
 
 def return_dict_from_list(request, sheet, provider):
     dict_list = []
+    context = {}
     code = 0
     description = ''
     list_price = 0.00
-    result = 0
-    context = {'task_id': result}
     for row_index in range(0, sheet.nrows):
         if provider == 1:  # ARTEC
             code = sheet.cell(row_index, 0).value.encode('utf-8')
@@ -77,9 +73,6 @@ def return_dict_from_list(request, sheet, provider):
              "Provider": provider,
              "Updated": str(datetime.datetime.today())}
         dict_list.append(d)
-        # Call to task
-        result = my_task.delay(row_index, sheet.nrows)
-        context['task_id'] = result.task_id
-        # print(context)
+        context = {'value': row_index, 'total': sheet.nrows}
         render(request, 'products/display_progress.html', context)
-    return context
+    return context, dict_list
