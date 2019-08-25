@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_page, name='home'),
     path('products/', include('products.urls')),
-    path('celery-progress/', include('celery_progress.urls')),
+    path('celery-progress/', include('celery_progress.urls', namespace='products')),
 ]
 
 if settings.DEBUG:

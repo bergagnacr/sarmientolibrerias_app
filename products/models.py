@@ -32,7 +32,17 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
-    def create(self):
-        return self.objects.create()
+    def __provider_code__(self):
+        return self.provider_code
+
+    def __provider__(self):
+        return self.provider
+
+    def __provider_price__(self):
+        return self.provider_price
+
+    def __updated__(self):
+        return self.updated
+
 
 

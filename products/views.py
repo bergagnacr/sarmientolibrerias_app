@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from django.shortcuts import render, HttpResponse
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
@@ -5,9 +6,13 @@ import xlrd
 import os
 import datetime
 from .models import Product
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 # Create your views here.
+
+
+def products_home(request):
+    return render(request, 'products/products_home.html', {})
 
 
 def products_import_home(request):
@@ -15,7 +20,7 @@ def products_import_home(request):
         filename = upload_file(request.FILES)
         provider = obtain_provider(filename)
         if provider is not None:
-            context, dic_list = read_workbook(request, filename, provider)
+            context = read_workbook(request, filename, provider)
             return render(request, 'products/display_progress.html', context)
     else:
         return render(request, 'products/display_progress.html', {'value': 0, 'total': 100})
@@ -66,11 +71,14 @@ def return_dict_from_list(request, sheet, provider):
             description = sheet.cell(row_index, 1).value.encode('utf-8')
             list_price = Decimal(parse_price(sheet.cell(row_index, 2).value.encode('utf-8'), provider))
         elif provider == 2:  # MONTENEGRO
-            code = sheet.cell(row_index, 0).value.encode('utf-8')
-            description = sheet.cell(row_index, 1).value.encode('utf-8')
-            list_price = Decimal(sheet.cell(row_index, 2).value)
-        if (len(code) == 0 or code == '') and (len(description) == 0 or description == ''):
-            break
+            code = sheet.cell(row_index, 0).value.encode('utf-8').decode('utf-8')
+            if len(code) == 0:
+                break
+            description = sheet.cell(row_index, 1).value.encode('utf-8').decode('utf-8')
+            try:
+                list_price = Decimal(sheet.cell(row_index, 2).value)
+            except InvalidOperation:
+                list_price = Decimal(0.00)
         product = Product(provider_code=code,
                           title=description,
                           provider=provider,
