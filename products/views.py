@@ -4,6 +4,8 @@ from django.conf import settings
 import xlrd
 import os
 import datetime
+from .models import Product
+from decimal import Decimal
 
 # Create your views here.
 
@@ -53,7 +55,7 @@ def read_workbook(request, excel_file, provider):
 
 
 def return_dict_from_list(request, sheet, provider):
-    dict_list = []
+    # dict_list = []
     context = {}
     code = 0
     description = ''
@@ -62,17 +64,19 @@ def return_dict_from_list(request, sheet, provider):
         if provider == 1:  # ARTEC
             code = sheet.cell(row_index, 0).value.encode('utf-8')
             description = sheet.cell(row_index, 1).value.encode('utf-8')
-            list_price = parse_price(sheet.cell(row_index, 2).value.encode('utf-8'), provider)
+            list_price = Decimal(parse_price(sheet.cell(row_index, 2).value.encode('utf-8'), provider))
         elif provider == 2:  # MONTENEGRO
             code = sheet.cell(row_index, 0).value.encode('utf-8')
             description = sheet.cell(row_index, 1).value.encode('utf-8')
-            list_price = sheet.cell(row_index, 2).value
-        d = {"Code": code,
-             "Description": description,
-             "ProviderPrice": list_price,
-             "Provider": provider,
-             "Updated": str(datetime.datetime.today())}
-        dict_list.append(d)
+            list_price = Decimal(sheet.cell(row_index, 2).value)
+        if (len(code) == 0 or code == '') and (len(description) == 0 or description == ''):
+            break
+        product = Product(provider_code=code,
+                          title=description,
+                          provider=provider,
+                          provider_price=list_price,
+                          updated=str(datetime.datetime.today()))
+        product.save()
         context = {'value': row_index, 'total': sheet.nrows}
         render(request, 'products/display_progress.html', context)
-    return context, dict_list
+    return context
