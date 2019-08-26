@@ -88,7 +88,12 @@ def return_dict_from_list(request, sheet, provider):
                           provider=provider,
                           provider_price=list_price,
                           updated=str(datetime.datetime.today()))
-        product.save()
+        if Product.objects.filter(title=description, provider_code=code).exists():
+            obj = Product.objects.filter(title__iexact=description, provider_code__iexact=code)
+            if "%.2f" % obj.first().provider_price != "%.2f" % list_price:
+                obj.update(provider_price=list_price)
+        else:
+            product.save()
         context = {'value': row_index, 'total': sheet.nrows}
         render(request, 'products/display_progress.html', context)
     return context
