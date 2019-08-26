@@ -40,7 +40,8 @@ def upload_file(price_list_file):
 
 def parse_price(price, provider):
     if provider == 1:
-        return float(price.split('$ ')[1].replace(',', '.'))
+        print(price)
+        return float(str(price).split('$ ')[1].replace(',', '.').replace("'", ''))
     elif provider == 2:
         return float(price.replace(",", '.'))
 
@@ -69,8 +70,10 @@ def return_dict_from_list(request, sheet, provider):
     list_price = 0.00
     for row_index in range(0, sheet.nrows):
         if provider == 1:  # ARTEC
-            code = sheet.cell(row_index, 0).value.encode('utf-8')
-            description = sheet.cell(row_index, 1).value.encode('utf-8')
+            code = sheet.cell(row_index, 0).value.encode('utf-8').decode('utf-8')
+            if len(code) == 0:
+                break
+            description = sheet.cell(row_index, 1).value.encode('utf-8').decode('utf-8')
             list_price = Decimal(parse_price(sheet.cell(row_index, 2).value.encode('utf-8'), provider))
         elif provider == 2:  # MONTENEGRO
             code = sheet.cell(row_index, 0).value.encode('utf-8').decode('utf-8')
