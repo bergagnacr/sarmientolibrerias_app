@@ -52,6 +52,8 @@ def obtain_provider(filename):
         return 2
     elif 'AUDITOR' in filename:
         return 3
+    elif 'FREIBERG' in filename:
+        return 4
     else:
         return None
 
@@ -96,6 +98,12 @@ def return_dict_from_list(request, sheet, provider):
                 break
             description = sheet.cell(row_index, 2).value.encode('utf-8').decode('utf-8')
             list_price = Decimal(sheet.cell(row_index, 6).value)
+        elif provider == 4:  # FREIBERG
+            code = sheet.cell(row_index, 0).value.encode('utf-8').decode('utf-8')
+            if len(code) == 0:
+                break
+            description = sheet.cell(row_index, 1).value.encode('utf-8').decode('utf-8')
+            list_price = Decimal(sheet.cell(row_index, 3).value) * Decimal(1.21) * Decimal(0.9)
         product = Product(provider_code=code,
                           title=description,
                           provider=provider,

@@ -28,7 +28,7 @@
                     <tr>
                         <td>{{ object.provider_code }}</td>
                         <td>{{ object.title }}</td>
-                        <td>{% if object.provider|slugify == 1|slugify %}ARTEC{% elif object.provider|slugify == 2|slugify %}MONTENEGRO{% else %}FREIBERG{% endif %}</td>
+                        <td>{% if object.provider|slugify == 1|slugify %}ARTEC{% elif object.provider|slugify == 2|slugify %}MONTENEGRO{%elif object.provider|slugify == 3|slugify %}AUDITOR{% else %}FREIBERG{% endif %}</td>
                         <td>{{ object.provider_price }}</td>
                         <td>{{ object.updated }}</td>
                     </tr>
