@@ -50,8 +50,14 @@ def obtain_provider(filename):
         return 1
     elif 'MONTENEGRO' in filename:
         return 2
+    elif 'AUDITOR' in filename:
+        return 3
     else:
         return None
+
+
+def convert_code_to_string(code):
+    return str(code).replace('.0', '')
 
 
 def read_workbook(request, excel_file, provider):
@@ -83,6 +89,13 @@ def return_dict_from_list(request, sheet, provider):
                 list_price = Decimal(sheet.cell(row_index, 2).value)
             except InvalidOperation:
                 list_price = Decimal(0.00)
+        elif provider == 3:  # AUDITOR
+            # code = str(sheet.cell(row_index, 1).value).encode('utf-8').decode('utf-8')
+            code = convert_code_to_string(sheet.cell(row_index, 1).value).encode('utf-8').decode('utf-8')
+            if len(code) == 0:
+                break
+            description = sheet.cell(row_index, 2).value.encode('utf-8').decode('utf-8')
+            list_price = Decimal(sheet.cell(row_index, 6).value)
         product = Product(provider_code=code,
                           title=description,
                           provider=provider,
