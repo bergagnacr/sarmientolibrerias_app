@@ -6,7 +6,7 @@ from django.db.models import Q
 
 class ProductManager(models.Manager):
     def all(self):
-        return self.get_queryset()
+        return self.get_queryset().all()
 
     def get_by_id(self, id):
         qs = self.get_queryset().filter(id=id)
@@ -43,6 +43,9 @@ class Product(models.Model):
 
     def __updated__(self):
         return self.updated
+
+    def all(self):
+        return self.objects.all()
 
 
 

@@ -16,19 +16,23 @@
             <table id="table_id" class="display">
                 <thead>
                     <tr>
-                        <th>Column 1</th>
-                        <th>Column 2</th>
+                        <th>Codigo</th>
+                        <th>Descripcion</th>
+                        <th>Proveedor</th>
+                        <th>Precio Proveedor</th>
+                        <th>Ultima Actualizacion</th>
                     </tr>
                 </thead>
                 <tbody>
+                {% for object in all_objects %}
                     <tr>
-                        <td>Row 1 Data 1</td>
-                        <td>Row 1 Data 2</td>
+                        <td>{{ object.provider_code }}</td>
+                        <td>{{ object.title }}</td>
+                        <td>{% if object.provider|slugify == 1|slugify %}ARTEC{% elif object.provider|slugify == 2|slugify %}MONTENEGRO{% else %}FREIBERG{% endif %}</td>
+                        <td>{{ object.provider_price }}</td>
+                        <td>{{ object.updated }}</td>
                     </tr>
-                    <tr>
-                        <td>Cap 2 Data 1</td>
-                        <td>Row 2 Data 2</td>
-                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>

@@ -5,14 +5,16 @@ from django.conf import settings
 import xlrd
 import os
 import datetime
-from .models import Product
+from .models import Product, ProductManager
 from decimal import Decimal, InvalidOperation
 
 # Create your views here.
 
 
 def products_home(request):
-    return render(request, 'products/products_home.html', {})
+    all_objects = Product.objects.all()
+    context = {'all_objects': all_objects}
+    return render(request, 'products/products_home.html', context)
 
 
 def products_import_home(request):
