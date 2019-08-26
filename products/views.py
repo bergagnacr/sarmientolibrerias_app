@@ -40,7 +40,6 @@ def upload_file(price_list_file):
 
 def parse_price(price, provider):
     if provider == 1:
-        print(price)
         return float(str(price).split('$ ')[1].replace(',', '.').replace("'", ''))
     elif provider == 2:
         return float(price.replace(",", '.'))
