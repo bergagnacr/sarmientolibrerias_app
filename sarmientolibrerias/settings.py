@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     # Packages
     # 'celery_progress',
-
+    'jquery',
     # My Apps
     'products',
 ]
