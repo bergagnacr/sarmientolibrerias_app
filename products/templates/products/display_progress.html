@@ -1,0 +1,16 @@
+{% extends 'products/import_lists.html' %}
+{% load static %}
+
+{% block progressbar %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="progress-wrapper">
+                <div id="progress-bar" class="progress-bar progress-bar-stripped bg-success"
+                     aria-valuemin="0" aria-valuenow="{{ object.value }}" aria-valuemax="{{ object.total }}">
+                    &nbsp;</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
