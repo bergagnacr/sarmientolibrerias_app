@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, maximum-scale=1">
+        <title>Sarmiento Librerias</title>
+        <link rel="icon" href="favicon.png" type="image/png">
+        {% include 'base/css.html' %}
+        {% include 'base/js.html' %}
+        {% block base_head %}{% endblock %}
+        <script type="text/javascript">
+            $(document).ready(function(e) {
+                $('.res-nav_click').click(function() {
+                    $('ul.toggle').slideToggle(600)
+                });
+
+                $(document).ready(function() {
+                    $(window).bind('scroll', function() {
+                        if ($(window).scrollTop() > 0) {
+                            $('#header_outer').addClass('fixed');
+                        } else {
+                            $('#header_outer').removeClass('fixed');
+                        }
+                    });
+
+                });
+
+
+            });
+
+            function resizeText() {
+                var preferredWidth = 767;
+                var displayWidth = window.innerWidth;
+                var percentage = displayWidth / preferredWidth;
+                var fontsizetitle = 25;
+                var newFontSizeTitle = Math.floor(fontsizetitle * percentage);
+                $(".divclass").css("font-size", newFontSizeTitle)
+            }
+        </script>
+    </head>
+    <body>
+    {% include 'base/navbar.html' with brand_name='Sarmiento Librerias' %}
+    <div class="container-fluid">
+        {% block content %}{% endblock %}
+    </div>
+    </body>
+</html>

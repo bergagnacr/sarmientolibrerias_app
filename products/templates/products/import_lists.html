@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% include 'base/css.html' %}
+{% block content %}
+    <div class="container">
+    <div class="row">
+        <div class="col-2">
+        </div>
+    <div class="col-8 text-center">
+        <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+            <input type="file" name="myfile"><br><br>
+    <button type="submit">Upload</button>
+  </form>
+    </div>
+        <div class="col-2">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <p></p>
+            <p></p>
+            {% block progressbar %}{% endblock %}
+{#            {% include  'products/snippets/display_progress.html' %}#}
+        </div>
+    </div>
+
+    </div>
+{% endblock %}

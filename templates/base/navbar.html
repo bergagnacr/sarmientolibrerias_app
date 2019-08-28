@@ -1,0 +1,62 @@
+{% load staticfiles %}
+{% url 'home' as home_url%}
+{% url 'login' as login_url%}
+{% url 'products:products_home' as products_url %}
+{% url 'products:import_lists'  as products_import_url %}
+
+{% url 'logout' as logout_url%}
+
+<!--Header_section-->
+	<header id="header_outer">
+		<div class="container">
+			<div class="header_section">
+				<div class="logo"><a href="javascript:void(0)"><img src="{% static 'img/logob.png' %}" alt=""></a></div>
+				<nav class="nav" id="nav">
+					<ul class="toggle">
+						<li><a href="{% url 'home' %}">Inicio</a></li>
+						<li><a href="#service">Servicios</a></li>
+						<li><a href="#Portfolio">Portfolio</a></li>
+						<li><a href="#client_outer">Clientes</a></li>
+						<li><a href="#contact">Contacto</a></li>
+                        {% if request.user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                  <a class="dropdown-item" href="{{ products_import_url }}">Importar Listas</a>
+                                  <a class="dropdown-item" href="{{ products_url }}">Consulta Precios</a>
+                                </div>
+                            </li>
+                            <li class="nav-item {% if request.path == logout_url%}active{% endif %}">
+                            <a class="nav-link" href="{{ logout_url }}">Logout</a>
+                              </li>
+                                {% else %}
+                                <li class="nav-item {% if request.path == login_url%}active{% endif %}">
+                                <a class="nav-link" href="{{ login_url }}">Login</a>
+                        {% endif %}
+					</ul>
+					<ul class="">
+						<li><a href="{% url 'home' %}">Inicio</a></li>
+						<li><a href="#service">Servicios</a></li>
+						<li><a href="#Portfolio">Portfolio</a></li>
+						<li><a href="#client_outer">Clientes</a></li>
+						<li><a href="#contact">Contacto</a></li>
+                        {% if request.user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                  <a class="dropdown-item" href="{{ products_import_url }}">Importar Listas</a>
+                                  <a class="dropdown-item" href="{{ products_url }}">Consulta Precios</a>
+                                </div>
+                            </li>
+                            <li class="nav-item {% if request.path == logout_url%}active{% endif %}">
+                            <a class="nav-link" href="{{ logout_url }}">Logout</a>
+                              </li>
+                                {% else %}
+                                <li class="nav-item {% if request.path == login_url%}active{% endif %}">
+                                <a class="nav-link" href="{{ login_url }}">Login</a>
+                        {% endif %}
+					</ul>
+				</nav>
+				<a class="res-nav_click animated wobble wow" href="javascript:void(0)"><i class="fa-bars"></i></a> </div>
+		</div>
+	</header>
