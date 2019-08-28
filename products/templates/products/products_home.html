@@ -3,11 +3,30 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-<script>
-    $(document).ready( function () {
-        $('#table_id').DataTable();
-    });
-</script>
+{#<script>#}
+{#    $(document).ready( function () {#}
+{#        $('#table_id').DataTable();#}
+{#    });#}
+{#</script>#}
+    <script>
+    $(document).ready(function() {
+        var data = [];
+        {##}
+        {#for ( var i=0 ; i<{{all_objects|length}} ; i++ ) {#}
+        {#    data.push( [ {{all_objects|i}}, i, i, i, i ] );#}
+        {# }#}
+        {% for object in all_objects %}
+        data.push( [ "{{ object.provider_code }}", "{{ object.title }}", {% if object.provider|slugify == 1|slugify %}"ARTEC"{% elif object.provider|slugify == 2|slugify %}"MONTENEGRO"{%elif object.provider|slugify == 3|slugify %}"AUDITOR"{% else %}"FREIBERG"{% endif %}, {{ object.provider_price }}, "{{ object.updated }}" ] );
+        {% endfor %}
+        $('#table_id').DataTable( {
+            data:           data,
+            {#deferRender:    true,#}
+            {#scrollY:        200,#}
+            {#scrollCollapse: true,#}
+            {#scroller:       true#}
+        } );
+    } );
+    </script>
     <h1>Products</h1>
     <div class="container">
     <div class="row">
@@ -23,15 +42,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for object in all_objects %}
-                    <tr>
-                        <td>{{ object.provider_code }}</td>
-                        <td>{{ object.title }}</td>
-                        <td>{% if object.provider|slugify == 1|slugify %}ARTEC{% elif object.provider|slugify == 2|slugify %}MONTENEGRO{%elif object.provider|slugify == 3|slugify %}AUDITOR{% else %}FREIBERG{% endif %}</td>
-                        <td>{{ object.provider_price }}</td>
-                        <td>{{ object.updated }}</td>
-                    </tr>
-                {% endfor %}
+{#                {% for object in all_objects %}#}
+{#                    <tr>#}
+{#                        <td>{{ object.provider_code }}</td>#}
+{#                        <td>{{ object.title }}</td>#}
+{#                        <td>{% if object.provider|slugify == 1|slugify %}ARTEC{% elif object.provider|slugify == 2|slugify %}MONTENEGRO{%elif object.provider|slugify == 3|slugify %}AUDITOR{% else %}FREIBERG{% endif %}</td>#}
+{#                        <td>{{ object.provider_price }}</td>#}
+{#                        <td>{{ object.updated }}</td>#}
+{#                    </tr>#}
+{#                {% endfor %}#}
                 </tbody>
             </table>
         </div>
