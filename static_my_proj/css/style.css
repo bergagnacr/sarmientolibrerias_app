@@ -262,7 +262,7 @@ a.learn_more2{
 	line-height:46px;
 	border-radius:3px;
 	text-align:center;
-	font-family:''Dosis'';
+	font-family: 'Dosis', serif;
 	text-transform:uppercase;
 	font-weight: 600;
 	transition:all 0.2s ease-in-out;
@@ -341,7 +341,7 @@ a.learn_more2:hover{
 	}
 	
 .service_block h3{
-	font-family: 'Dosis';
+	font-family: 'Dosis', serif;
 	font-weight: 600;
 	font-size:18px;
 	color:#111111;
@@ -394,7 +394,7 @@ a.learn_more2:hover{
 	text-align:center;
 }
 .service-list-col1 i{
-	display:;
+	display:none;
 	color:#888;
 	font-family: 'linecons';
 	font-size: 19px;
@@ -901,7 +901,7 @@ img {
 }
 
 .main-section.contact{
-	background:url(../img/bg-map.png) left 190px no-repeat;
+	background:url(../img/poligan_bg.jpg) left 190px no-repeat;
 }
 
 
@@ -1384,7 +1384,7 @@ img {
 		height:40px;
 		margin-top:40px;
 		opacity:0;
-		background:url(images/zoom.png);
+		/*background:url(images/zoom.png);*/
 		background-size:40px 40px;
 		transition:all 0.3s ease 0.1s;
 		-moz-transition:all 0.3s ease 0.2s;
@@ -1466,7 +1466,7 @@ img {
 	}
 	
 	#project-page-button-fullscreen li a {
-		background:url(images/close.png) no-repeat #fff;
+		/*background:url(images/close.png) no-repeat #fff;*/
 		background-size:50px 50px;
 		width:50px;
 		height:50px;
@@ -1520,14 +1520,14 @@ img {
 	
 	
 	.project-image-slider .bx-wrapper .bx-next {
-		background: url("images/project_slider_right.png") no-repeat;
+		background: url("../img/res_nav_click.png") no-repeat;
 		background-size:35px 65px;
 		opacity:0.3;
 		right:-90px;
 	}
 	
 	.project-image-slider .bx-wrapper .bx-prev {
-		background: url("images/project_slider_left.png") no-repeat ;
+		background: url("../img/res_nav_click.png") no-repeat ;
 		background-size:35px 65px;
 		opacity:0.3;
 		left:-90px;
