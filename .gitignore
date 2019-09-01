@@ -2,3 +2,6 @@
 /venv_windows/*
 .idea/*
 .DS_Store
+.venv/*
+products/migrations/*
+*.pyc
