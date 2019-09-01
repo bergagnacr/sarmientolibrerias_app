@@ -18,13 +18,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 
-from .views import home_page
+from .views import home_page, login_page, logout
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_page, name='home'),
+    path('login/', login_page, name='login'),
     path('products/', include('products.urls')),
     path('celery-progress/', include('celery_progress.urls', namespace='products')),
+    path('logout/', logout, name='logout'),
 ]
 
 if settings.DEBUG:

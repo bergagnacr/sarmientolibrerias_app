@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block base_head %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}"/>
+{% endblock base_head %}
+{% block content %}
+    <div class="container">
+        <div class="wrapper fadeInDown">
+          <div id="formContent">
+            <!-- Tabs Titles -->
+            <!-- Icon -->
+            <div class="fadeIn first">
+              <img src="{% static 'img/IMG_1825.PNG' %}" id="icon" alt="User Icon" width="20%" height="20%"/>
+            </div>
+              <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                  {% for field in form %}
+                      {% if field.name == 'username' %}
+                        <input type="text" required id="id_username" class="fadeIn second" name="{{field.name}}" placeholder="{{field.name}}">
+                      {% else %}
+                        <input type="{{field.name}}" required id="id_password" class="fadeIn third" name="{{field.name}}" placeholder="{{field.name}}">
+                      {% endif %}
+                  {% endfor %}
+              <input type="submit" class="fadeIn fourth" value="Log In">
+              </form>
+
+          </div>
+        </div>
+    </div>
+{% endblock %}
