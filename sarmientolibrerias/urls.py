@@ -17,8 +17,9 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
-from .views import home_page, login_page, logout
+from .views import home_page, login_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,7 +27,9 @@ urlpatterns = [
     path('login/', login_page, name='login'),
     path('products/', include('products.urls')),
     path('celery-progress/', include('celery_progress.urls', namespace='products')),
-    path('logout/', logout, name='logout'),
+    # path('logout/', logout, name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
 ]
 
 if settings.DEBUG:

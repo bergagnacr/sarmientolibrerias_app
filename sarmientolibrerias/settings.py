@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # My Apps
     'products',
 ]
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_my_proj")]

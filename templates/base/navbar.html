@@ -3,7 +3,6 @@
 {% url 'login' as login_url%}
 {% url 'products:products_home' as products_url %}
 {% url 'products:import_lists'  as products_import_url %}
-
 {% url 'logout' as logout_url%}
 
 <!--Header_section-->
@@ -28,7 +27,7 @@
                             <li class="nav-item {% if request.path == logout_url%}active{% endif %}">
                             <a class="nav-link" href="{{ logout_url }}">Logout</a>
                               </li>
-                                {% else %}
+                        {% else %}
                                 <li class="nav-item {% if request.path == login_url%}active{% endif %}">
                                 <a class="nav-link" href="{{ login_url }}">Login</a>
                         {% endif %}

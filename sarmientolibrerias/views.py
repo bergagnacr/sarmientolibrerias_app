@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect, HttpResponse, reverse
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from .forms import LoginForm
 from django.utils.http import is_safe_url
@@ -35,4 +35,5 @@ def login_page(request):
 
 def logout_page(request):
     logout(request)
-    return redirect(request, "/")
+    url = reverse("login")
+    return redirect(url, args=(), kwargs={})
