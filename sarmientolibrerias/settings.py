@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'products',
 ]
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static_cdn/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_my_proj")]
 
