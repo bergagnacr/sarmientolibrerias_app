@@ -26,7 +26,7 @@ urlpatterns = [
     path('', home_page, name='home'),
     path('login/', login_page, name='login'),
     path('products/', include('products.urls')),
-    path('celery-progress/', include('celery_progress.urls', namespace='products')),
+    # path('celery-progress/', include('celery_progress.urls', namespace='products')),
     # path('logout/', logout, name='logout'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 

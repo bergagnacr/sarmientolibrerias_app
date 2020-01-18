@@ -5,7 +5,13 @@ from products.models import Product
 
 
 class ProductsAdmin(admin.ModelAdmin):
-    list_display = ['__provider_code__', '__str__', '__provider__', '__provider_price__', '__updated__']
+    list_display = ['__provider_code__',
+                    '__str__',
+                    '__provider__',
+                    '__provider_price__',
+                    '__retailer_price__',
+                    '__wholesaler_price__',
+                    '__updated__']
 
     class Meta:
         model = Product

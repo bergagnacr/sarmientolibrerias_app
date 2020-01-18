@@ -16,7 +16,21 @@
         {#    data.push( [ {{all_objects|i}}, i, i, i, i ] );#}
         {# }#}
         {% for object in all_objects %}
-        data.push( [ "{{ object.provider_code }}", "{{ object.title }}", {% if object.provider|slugify == 1|slugify %}"ARTEC"{% elif object.provider|slugify == 2|slugify %}"MONTENEGRO"{%elif object.provider|slugify == 3|slugify %}"AUDITOR"{% else %}"FREIBERG"{% endif %}, {{ object.provider_price }}, "{{ object.updated }}" ] );
+        data.push( [ "{{ object.provider_code }}",
+            "{{ object.title }}",
+            {% if object.provider|slugify == 1|slugify %}
+                    "ARTEC"
+                {% elif object.provider|slugify == 2|slugify %}
+                    "MONTENEGRO"
+                {%elif object.provider|slugify == 3|slugify %}
+                    "AUDITOR"
+                {% else %}
+                    "FREIBERG"
+            {% endif %},
+            {{ object.provider_price }},
+            {{  object.retailer_price }},
+            {{ object.wholesaler_price }},
+        "{{ object.updated }}" ] );
         {% endfor %}
         $('#table_id').DataTable( {
             data:           data,
@@ -38,6 +52,8 @@
                         <th>Descripcion</th>
                         <th>Proveedor</th>
                         <th>Precio Proveedor</th>
+                        <th>Precio Minorista</th>
+                        <th>Precio Mayorista</th>
                         <th>Ultima Actualizacion</th>
                     </tr>
                 </thead>

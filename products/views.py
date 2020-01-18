@@ -108,6 +108,8 @@ def return_dict_from_list(request, sheet, provider):
                           title=description,
                           provider=provider,
                           provider_price=list_price,
+                          retailer_price=Decimal(list_price*Decimal(1.93)),
+                          wholesaler_price=Decimal(list_price*Decimal(1.73)),
                           updated=str(datetime.datetime.today()))
         if Product.objects.filter(title=description, provider_code=code).exists():
             obj = Product.objects.filter(title__iexact=description, provider_code__iexact=code)
