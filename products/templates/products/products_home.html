@@ -1,31 +1,32 @@
 {% extends 'products/products_base.html' %}
 {% load staticfiles %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
     <script>
     $(document).ready(function() {
-        var data = [];
-        {% for object in all_objects %}
-        data.push( [ "{{ object.provider_code }}",
-            "{{ object.title }}",
-            {% if object.provider|slugify == 1|slugify %}
-                    "ARTEC"
-                {% elif object.provider|slugify == 2|slugify %}
-                    "MONTENEGRO"
-                {%elif object.provider|slugify == 3|slugify %}
-                    "AUDITOR"
-                {% else %}
-                    "FREIBERG"
-            {% endif %},
-            {{ object.provider_price }},
-            {{  object.retailer_price }},
-            {{ object.wholesaler_price }},
-        "{{ object.updated }}" ] );
-        {% endfor %}
-        var table = $('#table_id').DataTable( {
-            data:           data,
-        });
+        var table = $('#table_id').DataTable(
+        {
+            "ajax":
+                    {
+                        "type":'POST',
+                        "url":'/products/json/',
+                        "contentType":'application/json',
+                        "dataType":'json',
+                        "headers": {'X-CSRFToken': '{{ csrf_token }}'},
+                        'data': function (data) { return data = JSON.stringify(data); }
+                    },
+            "columns": [
+                     { "data": "provider_code" },
+                     { "data": "title" },
+                     { "data": "provider" },
+                     { "data": "provider_price" },
+                     { "data": "retailer_price" },
+                     { "data": "wholesaler_price" },
+                     { "data": "updated" },
+                 ],
+         }
+        );
         table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
         var cell = table.cell({ row: rowIdx, column: 3 }).node();
         $(cell).css('background-color', '#FFAE9D');
@@ -56,7 +57,7 @@
                         <th>Codigo</th>
                         <th>Descripcion</th>
                         <th>Proveedor</th>
-                        <th bgcolor="#FFAE9D">Precio Proveedor</th>
+                        <th bgcolor="#FFAE9D">Precio Lista</th>
                         <th bgcolor="#9DF6FF">Precio Minorista</th>
                         <th bgcolor="#F1FF9C">Precio Mayorista</th>
                         <th>Ultima Actualizacion</th>

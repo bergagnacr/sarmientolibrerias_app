@@ -5,16 +5,33 @@ from django.conf import settings
 import xlrd
 import os
 import datetime
+import simplejson as json
+from django.core.serializers.json import DjangoJSONEncoder
 from .models import Product, ProductManager
+from django.core import serializers
 from decimal import Decimal, InvalidOperation
 
 # Create your views here.
 
 
+
+
 def products_home(request):
-    all_objects = Product.objects.all()
-    context = {'all_objects': all_objects}
-    return render(request, 'products/products_home.html', context)
+    return render(request, 'products/products_home.html', {})
+
+
+def products_home_json(request):
+    all_objects = Product.objects.all().values(
+                                            'provider_code',
+                                            'title',
+                                            'provider',
+                                            'provider_price',
+                                            'retailer_price',
+                                            'wholesaler_price',
+                                            'updated')
+    all_objects = json.dumps({"data": list(all_objects)},
+                             default=str)
+    return HttpResponse(all_objects, content_type='application/json')
 
 
 def products_import_home(request):
