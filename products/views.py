@@ -6,14 +6,10 @@ import xlrd
 import os
 import datetime
 import simplejson as json
-from django.core.serializers.json import DjangoJSONEncoder
 from .models import Product, ProductManager
-from django.core import serializers
 from decimal import Decimal, InvalidOperation
 
 # Create your views here.
-
-
 
 
 def products_home(request):
@@ -113,19 +109,18 @@ def return_dict_from_list(request, sheet, provider):
                 list_price = Decimal(0.00)
         elif provider == 3:  # AUDITOR
             provider_name = "AUDITOR"
-            # code = str(sheet.cell(row_index, 1).value).encode('utf-8').decode('utf-8')
-            code = convert_code_to_string(sheet.cell(row_index, 1).value).encode('utf-8').decode('utf-8')
+            code = convert_code_to_string(sheet.cell(row_index, 0).value).encode('utf-8').decode('utf-8')
             if len(code) == 0:
                 break
-            description = sheet.cell(row_index, 2).value.encode('utf-8').decode('utf-8')
-            list_price = Decimal(sheet.cell(row_index, 6).value)
+            description = sheet.cell(row_index, 1).value.encode('utf-8').decode('utf-8')
+            list_price = Decimal(sheet.cell(row_index, 2).value)
         elif provider == 4:  # FREIBERG
             provider_name = "FREIBERG"
             code = sheet.cell(row_index, 0).value.encode('utf-8').decode('utf-8')
             if len(code) == 0:
                 break
             description = sheet.cell(row_index, 1).value.encode('utf-8').decode('utf-8')
-            list_price = Decimal(sheet.cell(row_index, 3).value) * Decimal(1.21) * Decimal(0.9)
+            list_price = Decimal(sheet.cell(row_index, 2).value) * Decimal(1.21) * Decimal(0.9)
         product = Product(provider_code=code,
                           title=description,
                           provider=provider_name,

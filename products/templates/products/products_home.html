@@ -2,49 +2,60 @@
 {% load staticfiles %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
     <script>
     $(document).ready(function() {
-        var table = $('#table_id').DataTable(
-        {
-            "ajax":
+        $('#table_id').DataTable(
+            {
+                "processing": true,
+                "ajax":
                     {
-                        "type":'POST',
-                        "url":'/products/json/',
-                        "contentType":'application/json',
-                        "dataType":'json',
+                        "type": 'POST',
+                        "url": '/products/json/',
+                        "contentType": 'application/json',
+                        "dataType": 'json',
                         "headers": {'X-CSRFToken': '{{ csrf_token }}'},
-                        'data': function (data) { return data = JSON.stringify(data); }
+                        'data': function (data) {
+                            return data = JSON.stringify(data);
+                        }
                     },
-            "columns": [
-                     { "data": "provider_code" },
-                     { "data": "title" },
-                     { "data": "provider" },
-                     { "data": "provider_price" },
-                     { "data": "retailer_price" },
-                     { "data": "wholesaler_price" },
-                     { "data": "updated" },
-                 ],
-         }
+                "columns": [
+                    {"data": "provider_code"},
+                    {"data": "title"},
+                    {"data": "provider"},
+                    {"data": "provider_price"},
+                    {"data": "retailer_price"},
+                    {"data": "wholesaler_price"},
+                    {"data": "updated"},
+                ],
+                "aoColumnDefs": [{
+                    "aTargets": [3],
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                            $(nTd).css('background-color', '#FFAE9D');
+                            $(nTd).css("font-weight", "bold");
+                            $(nTd).css("text-align", "center");
+                            }
+                },
+                    {
+                    "aTargets": [4],
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                            $(nTd).css('background-color', '#9DF6FF');
+                            $(nTd).css("font-weight", "bold");
+                            $(nTd).css("text-align", "center");
+                            }
+                },
+                    {
+                    "aTargets": [5],
+                    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                            $(nTd).css('background-color', '#F1FF9C');
+                            $(nTd).css("font-weight", "bold");
+                            $(nTd).css("text-align", "center");
+                            }
+                    }
+                ]
+            }
         );
-        table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
-        var cell = table.cell({ row: rowIdx, column: 3 }).node();
-        $(cell).css('background-color', '#FFAE9D');
-        $(cell).css('font-weight', 'bold');
-        $(cell).css('text-align', 'center');
-        });
-        table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
-            var cell = table.cell({row: rowIdx, column: 4}).node();
-            $(cell).css('background-color', '#9DF6FF');
-            $(cell).css('font-weight', 'bold');
-            $(cell).css('text-align', 'center');
-        });
-        table.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
-            var cell = table.cell({row: rowIdx, column: 5}).node();
-            $(cell).css('background-color', '#F1FF9C');
-            $(cell).css('font-weight', 'bold');
-            $(cell).css('text-align', 'center');
-        });
     } );
     </script>
     <h1>Products</h1>
