@@ -20,8 +20,8 @@ class ProductManager(models.Manager):
 
 class Product(models.Model):
     # name = models.CharField(max_length=120)
-    title = models.CharField(max_length=120)
     provider_code = models.CharField(max_length=120)
+    title = models.CharField(max_length=120)
     provider = models.CharField(max_length=120)
     provider_price = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     retailer_price = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
