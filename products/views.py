@@ -92,14 +92,17 @@ def return_dict_from_list(request, sheet, provider):
     code = 0
     description = ''
     list_price = 0.00
+    provider_name = ""
     for row_index in range(0, sheet.nrows):
         if provider == 1:  # ARTEC
+            provider_name = "ARTEC"
             code = sheet.cell(row_index, 0).value.encode('utf-8').decode('utf-8')
             if len(code) == 0:
                 break
             description = sheet.cell(row_index, 1).value.encode('utf-8').decode('utf-8')
             list_price = Decimal(parse_price(sheet.cell(row_index, 2).value.encode('utf-8'), provider))
         elif provider == 2:  # MONTENEGRO
+            provider_name = "MONTENEGRO"
             code = sheet.cell(row_index, 0).value.encode('utf-8').decode('utf-8')
             if len(code) == 0:
                 break
@@ -109,6 +112,7 @@ def return_dict_from_list(request, sheet, provider):
             except InvalidOperation:
                 list_price = Decimal(0.00)
         elif provider == 3:  # AUDITOR
+            provider_name = "AUDITOR"
             # code = str(sheet.cell(row_index, 1).value).encode('utf-8').decode('utf-8')
             code = convert_code_to_string(sheet.cell(row_index, 1).value).encode('utf-8').decode('utf-8')
             if len(code) == 0:
@@ -116,6 +120,7 @@ def return_dict_from_list(request, sheet, provider):
             description = sheet.cell(row_index, 2).value.encode('utf-8').decode('utf-8')
             list_price = Decimal(sheet.cell(row_index, 6).value)
         elif provider == 4:  # FREIBERG
+            provider_name = "FREIBERG"
             code = sheet.cell(row_index, 0).value.encode('utf-8').decode('utf-8')
             if len(code) == 0:
                 break
@@ -123,7 +128,7 @@ def return_dict_from_list(request, sheet, provider):
             list_price = Decimal(sheet.cell(row_index, 3).value) * Decimal(1.21) * Decimal(0.9)
         product = Product(provider_code=code,
                           title=description,
-                          provider=provider,
+                          provider=provider_name,
                           provider_price=list_price,
                           retailer_price=Decimal(list_price*Decimal(1.93)),
                           wholesaler_price=Decimal(list_price*Decimal(1.73)),
