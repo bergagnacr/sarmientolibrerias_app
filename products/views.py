@@ -113,7 +113,7 @@ def return_dict_from_list(request, sheet, provider):
             if len(code) == 0:
                 break
             description = sheet.cell(row_index, 1).value.encode('utf-8').decode('utf-8')
-            list_price = Decimal(sheet.cell(row_index, 2).value)
+            list_price = Decimal(sheet.cell(row_index, 2).value) * Decimal(0.85) * Decimal(1.21)
         elif provider == 4:  # FREIBERG
             provider_name = "FREIBERG"
             code = sheet.cell(row_index, 0).value.encode('utf-8').decode('utf-8')
